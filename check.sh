@@ -5,8 +5,8 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-NODE1="node1"
-NODE2="node2"
+NODE1="172.25.250.10"
+NODE2="172.25.250.11"
 ROOT_PASS="radiowits"
 PASS_THRESHOLD=70
 TOTAL=20
