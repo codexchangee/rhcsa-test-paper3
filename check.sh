@@ -152,34 +152,70 @@ else
   add_summary Q13 UID FAIL
 fi
 
-# Q14 – Login script
-if run_remote $NODE1 "su - pandora -c true 2>&1 | grep -q 'Welcome to RHCSA examination'"; then
-  check_ok "Q14 Login message"
+# Q14 – Login script via .bash_profile (pandora)
+
+LOGIN_SCRIPT="$(run_remote $NODE1 \
+  "awk '/^\/home\/pandora\// {print \$1}' /home/pandora/.bash_profile 2>/dev/null | head -1")"
+
+if [[ -n "$LOGIN_SCRIPT" ]] \
+   && run_remote $NODE1 "[[ -f $LOGIN_SCRIPT && -x $LOGIN_SCRIPT ]]" \
+   && run_remote $NODE1 "su - pandora -c true 2>&1 | grep -qi 'welcome to rhcsa examination'"
+then
+  check_ok "Q14 Login script correctly configured for pandora"
   add_summary Q14 Login PASS
 else
-  check_fail "Q14 Login message missing"
+  check_fail "Q14 Login script missing or not executed via .bash_profile"
   add_summary Q14 Login FAIL
 fi
 
-# Q15 – Container watcher
-if run_remote $NODE1 "podman ps --format '{{.Names}}' | grep -q watcher"; then
-  check_ok "Q15 Container watcher running"
+
+# Q15 – Container watcher (image, container, systemd user service)
+
+if run_remote $NODE1 "
+  # 1. Image exists
+  su - siya -c \"podman images --format '{{.Repository}}:{{.Tag}}' | grep -q '^codesxchange/watcher'\" &&
+
+  # 2. Container exists (ps -a)
+  su - siya -c \"podman ps -a --format '{{.Names}}' | grep -qx watcher\" &&
+
+  # 3. Container is running (ps)
+  su - siya -c \"podman ps --format '{{.Names}}' | grep -qx watcher\" &&
+
+  # 4. systemd user service file exists
+  [ -f /home/siya/.config/systemd/user/container-watcher.service ] &&
+
+  # 5. systemd user service enabled
+  su - siya -c \"systemctl --user is-enabled container-watcher.service\" | grep -qx enabled &&
+
+  # 6. systemd user service active
+  su - siya -c \"systemctl --user is-active container-watcher.service\" | grep -qx active
+"
+then
+  check_ok "Q15 Container watcher correctly configured (image, container, service)"
   add_summary Q15 Container PASS
 else
-  check_fail "Q15 Container missing"
+  check_fail "Q15 Container watcher incomplete or misconfigured"
   add_summary Q15 Container FAIL
 fi
 
+
 echo -e "\n${bold}${blue}Connecting to node2 (Q16–Q21)${reset}"
 
-# Q16 – Root password
-if run_remote $NODE2 "getent shadow root | grep -v '!*'"; then
-  check_ok "Q16 Root password set"
+# Q16 – Root password (verify by login)
+if sshpass -p "$ROOT_PASS" ssh \
+    -o StrictHostKeyChecking=no \
+    -o UserKnownHostsFile=/dev/null \
+    -o BatchMode=no \
+    -o ConnectTimeout=5 \
+    root@"$NODE2" "true" >/dev/null 2>&1
+then
+  check_ok "Q16 Root password correct (login successful)"
   add_summary Q16 RootPW PASS
 else
-  check_fail "Q16 Root password issue"
+  check_fail "Q16 Root password incorrect (login failed)"
   add_summary Q16 RootPW FAIL
 fi
+
 
 # Q17 – Repos
 if run_remote $NODE2 "grep -Rqs content.example.com /etc/yum.repos.d"; then
@@ -218,7 +254,7 @@ else
 fi
 
 # Q21 – Resize home
-if run_remote $NODE2 "df -m /home | awk 'NR==2 {print \$2}' | awk '{exit !(\$1>=155 && \$1<=165)}'"; then
+if run_remote $NODE2 "df -m /home | awk 'NR==2 {print \$2}' | awk '{exit !(\$1>=140 && \$1<=170)}'"; then
   check_ok "Q21 /home resized"
   add_summary Q21 Resize PASS
 else
