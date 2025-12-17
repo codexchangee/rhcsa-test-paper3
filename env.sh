@@ -8,6 +8,7 @@ bash <<'WRAP'
 WORK_URL="https://raw.githubusercontent.com/codexchangee/rhcsa-test-paper3/refs/heads/main/workstation.sh"
 SERVERA_URL="https://raw.githubusercontent.com/codexchangee/rhcsa-test-paper3/refs/heads/main/servera.sh"
 SERVERB_URL="https://raw.githubusercontent.com/codexchangee/rhcsa-test-paper3/refs/heads/main/serverb.sh"
+CHECK_URL="https://raw.githubusercontent.com/codexchangee/rhcsa-test-paper3/refs/heads/main/check.sh"
 
 HOST_A="servera"
 HOST_B="serverb"
@@ -44,6 +45,20 @@ ssh -o StrictHostKeyChecking=no root@"$HOST_A" \
   'bash -s' < <(curl -fsSL "$SERVERA_URL") \
   2>&1 | tee "$TMPDIR/servera.log" \
   || echo "[run-all] servera finished with errors"
+
+
+  +
++#####################################
++echo "[run-all] Installing paper-check command on workstation..."
++#####################################
++curl -fsSL "$CHECK_URL" -o /usr/bin/paper-check \
++  || { echo "Failed to download check.sh"; exit 1; }
++
++chmod +x /usr/bin/paper-check
++
++echo "[run-all] paper-check command installed"
+
+
 
 #####################################
 echo "[run-all] Running serverb script on $HOST_B..."
