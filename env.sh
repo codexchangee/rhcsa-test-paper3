@@ -5,9 +5,9 @@ bash <<'WRAP'
 #####################################
 # CONFIG
 #####################################
-WORK_URL="https://raw.githubusercontent.com/codexchangee/rhcsa-test-paper3/blob/main/workstations.sh"
-SERVERA_URL="https://raw.githubusercontent.com/codexchangee/rhcsa-test-paper3/blob/main/servera.sh"
-SERVERB_URL="https://raw.githubusercontent.com/codexchangee/rhcsa-test-paper3/blob/main/serverb.sh"
+WORK_URL="https://raw.githubusercontent.com/codexchangee/rhcsa-test-paper3/refs/heads/main/workstations.sh"
+SERVERA_URL="https://raw.githubusercontent.com/codexchangee/rhcsa-test-paper3/refs/heads/main/servera.sh"
+SERVERB_URL="https://raw.githubusercontent.com/codexchangee/rhcsa-test-paper3/refs/heads/main/serverb.sh"
 
 HOST_A="servera"
 HOST_B="serverb"
