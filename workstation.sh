@@ -2,7 +2,9 @@
 set -euo pipefail
 
 # ====== CONFIG ======
-REPO_URL="${REPO_URL:-https://github.com/codexchangee/rhcsa-test-paper3.git}"
+unset REPO_URL
+REPO_URL="https://github.com/codexchangee/rhcsa-test-paper3.git"
+
 BRANCH="${BRANCH:-main}"
 HTML_DIR="/var/www/html"
 
