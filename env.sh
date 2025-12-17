@@ -5,7 +5,7 @@ bash <<'WRAP'
 #####################################
 # CONFIG
 #####################################
-WORK_URL="https://raw.githubusercontent.com/codexchangee/rhcsa-test-paper3/refs/heads/main/workstations.sh"
+WORK_URL="https://raw.githubusercontent.com/codexchangee/rhcsa-test-paper3/refs/heads/main/workstation.sh"
 SERVERA_URL="https://raw.githubusercontent.com/codexchangee/rhcsa-test-paper3/refs/heads/main/servera.sh"
 SERVERB_URL="https://raw.githubusercontent.com/codexchangee/rhcsa-test-paper3/refs/heads/main/serverb.sh"
 
