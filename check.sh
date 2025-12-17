@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-# Workstation Autograder — Node1 + Node2 via SSH
-# PASS threshold: 70%
 
 set -u
 set -o pipefail
@@ -44,9 +42,6 @@ ensure_sshpass
 echo -e "${blue}${bold}Starting Workstation Autograder${reset}"
 echo "----------------------------------------"
 
-################################
-# NODE1 : Q02 – Q15
-################################
 echo -e "\n${bold}${blue}Connecting to node1 (Q02–Q15)${reset}"
 
 # Q02 – Network
@@ -175,9 +170,6 @@ else
   add_summary Q15 Container FAIL
 fi
 
-################################
-# NODE2 : Q16 – Q21
-################################
 echo -e "\n${bold}${blue}Connecting to node2 (Q16–Q21)${reset}"
 
 # Q16 – Root password
@@ -234,9 +226,6 @@ else
   add_summary Q21 Resize FAIL
 fi
 
-################################
-# SUMMARY
-################################
 echo -e "\n${bold}${blue}Summary${reset}"
 printf "%-5s | %-20s | %-6s\n" "Q" "Task" "Result"
 echo "------------------------------------------"
@@ -254,7 +243,7 @@ echo "------------------------------------------"
 echo -e "TOTAL: $PASSED / $TOTAL  →  ${bold}${PERCENT}%${reset}"
 
 if (( PERCENT >= PASS_THRESHOLD )); then
-  echo -e "${green}${bold}RESULT: PASS 🎉${reset}"
+  echo -e "${green}${bold}RESULT: PASS${reset}"
 else
-  echo -e "${red}${bold}RESULT: FAIL ❌${reset}"
+  echo -e "${red}${bold}RESULT: FAIL${reset}"
 fi
