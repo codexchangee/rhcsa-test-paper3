@@ -2,7 +2,8 @@
 # Workstation Autograder — Node1 + Node2 via SSH
 # PASS threshold: 70%
 
-set -euo pipefail
+set -u
+set -o pipefail
 IFS=$'\n\t'
 
 NODE1="172.25.250.10"
